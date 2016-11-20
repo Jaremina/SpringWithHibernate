@@ -12,7 +12,7 @@ public interface CategoryService {
 
     List<Category> findAll();
     Category findById(Long id);
-    void save();
+    void save(Category category);
     void delete(Category category);
 
 }

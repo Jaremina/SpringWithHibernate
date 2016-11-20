@@ -1,9 +1,11 @@
 package pl.akademiakodu.giflib.web.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import pl.akademiakodu.giflib.model.Gif;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import pl.akademiakodu.giflib.service.GifService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,11 +13,13 @@ import java.util.List;
 @Controller
 public class GifController {
 
+    @Autowired
+    private GifService gifService;
+
     // Home page - index of all GIFs
     @RequestMapping("/")
     public String listGifs(Model model) {
-        // TODO: Get all gifs
-        List<Gif> gifs = new ArrayList<>();
+        List<Gif> gifs = gifService.findAll();
 
         model.addAttribute("gifs", gifs);
         return "gif/index";

@@ -1,6 +1,11 @@
 package pl.akademiakodu.giflib.model;
 
+import pl.akademiakodu.giflib.web.validation.KnownColor;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +14,11 @@ public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotNull
+    @Size(min=3, max=12)
     private String name;
+    @NotNull
+    @KnownColor
     private String colorCode;
     @OneToMany(mappedBy = "category")
     private List<Gif> gifs = new ArrayList<>();
