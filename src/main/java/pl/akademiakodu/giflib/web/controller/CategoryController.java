@@ -10,7 +10,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import pl.akademiakodu.giflib.repository.CategoryRepository;
+import pl.akademiakodu.giflib.web.FlashMessage;
+import pl.akademiakodu.giflib.web.Status;
 import pl.akademiakodu.giflib.service.CategoryService;
 import pl.akademiakodu.giflib.web.Color;
 
@@ -82,6 +83,7 @@ public class CategoryController {
             return "redirect:/categories/add";
         }
         categoryService.save(category);
+        redirectAttributes.addFlashAttribute("flash", new FlashMessage(Status.SUCCESS, "operacja sie udala"));
 
         return "redirect:/categories";
     }
