@@ -14,13 +14,13 @@ public class Gif {
     private String description;
     @ManyToOne
     private Category category;
-    private LocalDateTime dateUploaded = LocalDateTime.now();
+    //private LocalDateTime dateUploaded = LocalDateTime.now();
     private String username = "You";
     private boolean favorite;
     private String hash;
 
     public Gif(){}
-
+/*
     public String getTimeSinceUploaded() {
         String unit = "";
         LocalDateTime now = LocalDateTime.now();
@@ -39,7 +39,7 @@ public class Gif {
             diff = ChronoUnit.YEARS.between(dateUploaded,now);
         }
         return String.format("%d %s",diff,unit);
-    }
+    }*/
 
     public Long getId() {
         return id;
@@ -73,13 +73,13 @@ public class Gif {
         this.category = category;
     }
 
-    public LocalDateTime getDateUploaded() {
+   /* public LocalDateTime getDateUploaded() {
         return dateUploaded;
-    }
+    }*/
 
-    public void setDateUploaded(LocalDateTime dateUploaded) {
+    /*public void setDateUploaded(LocalDateTime dateUploaded) {
         this.dateUploaded = dateUploaded;
-    }
+    }*/
 
     public String getUsername() {
         return username;

@@ -33,7 +33,9 @@ public class GifRepositoryImpl implements GifRepository {
 
     @Override
     public Gif findByID(Long id) {
-        return null;
+        try(Session session = sessionFactory.openSession()){
+            return session.get(Gif.class, id);
+        }
     }
 
     @Override
@@ -47,6 +49,10 @@ public class GifRepositoryImpl implements GifRepository {
 
     @Override
     public void delete(Gif gif) {
-
+        try(Session session= sessionFactory.openSession()){
+            session.beginTransaction();
+            session.delete(gif);
+            session.getTransaction().commit();
+        }
     }
 }
