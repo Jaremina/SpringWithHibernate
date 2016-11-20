@@ -18,7 +18,7 @@ public class KnowColorValidator implements ConstraintValidator<KnownColor,  Stri
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
         for(Color color : Color.values()){
-            if(value.equalsIgnoreCase(color.getHexCode())){
+            if(color.getHexCode().equalsIgnoreCase(value)){
                 return true;
             }
         }

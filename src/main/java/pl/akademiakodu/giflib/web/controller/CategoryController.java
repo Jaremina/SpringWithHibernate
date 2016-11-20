@@ -3,6 +3,7 @@ package pl.akademiakodu.giflib.web.controller;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.akademiakodu.giflib.model.Category;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -45,7 +46,9 @@ public class CategoryController {
     // Form for adding a new category
     @RequestMapping("categories/add")
     public String formNewCategory(Model model) {
-        model.addAttribute("category", new Category());
+        if(!model.containsAttribute("category")){
+            model.addAttribute("category", new Category());
+        }
         model.addAttribute("colors", Color.values());
 
         return "category/form";
@@ -70,8 +73,12 @@ public class CategoryController {
 
     // Add a category
     @RequestMapping(value = "/categories", method = RequestMethod.POST)
-    public String addCategory(@Valid Category category , BindingResult validationResult) {
+    public String addCategory(@Valid Category category,
+                              BindingResult validationResult,
+                              RedirectAttributes redirectAttributes) {
         if(validationResult.hasErrors()){
+            redirectAttributes.addFlashAttribute("category", category);
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.category",validationResult); // "org.spring.framework.BindingResult.category" to tak musi byc
             return "redirect:/categories/add";
         }
         categoryService.save(category);

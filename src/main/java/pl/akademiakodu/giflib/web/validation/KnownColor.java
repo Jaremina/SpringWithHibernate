@@ -15,7 +15,7 @@ import java.lang.annotation.Target;
 @Constraint(validatedBy = KnowColorValidator.class)// klasa odpalana przy walidacji
 public @interface KnownColor {
 
-    String message() default "wrong color"; // wiadomosc widoczna wtedy gdy walidator stwierdzi ze wartosc jest nie prawidlowa
+    String message() default "{KnownColor}"; // wiadomosc widoczna wtedy gdy walidator stwierdzi ze wartosc jest nie prawidlowa
 
     //szablon
     Class<?>[] groups() default {};

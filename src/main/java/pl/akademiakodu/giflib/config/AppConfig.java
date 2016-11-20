@@ -2,10 +2,13 @@ package pl.akademiakodu.giflib.config;
 
 import org.hashids.Hashids;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
+
 
 
 @Configuration
@@ -18,4 +21,13 @@ public class AppConfig {
     public Hashids hashids() {
         return new Hashids(env.getProperty("giflib.hash.salt"),8);
     }
+
+    // zeby mies wlasne wiadomosci przy errorach
+    @Bean
+    public MessageSource messageSource(){
+        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+        messageSource.setBasename("messages");
+        return messageSource;
+    }
+
 }
