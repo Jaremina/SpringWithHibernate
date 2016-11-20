@@ -35,9 +35,7 @@ public class AdsProviderRepositoryImpl implements AdsProviderRepository {
             CriteriaQuery<AdvertismentProvider> adsProviderQuery = builder.createQuery(AdvertismentProvider.class);
             adsProviderQuery.from(AdvertismentProvider.class);
 
-            List<AdvertismentProvider> advertismentProviders = session.createQuery(adsProviderQuery).getResultList();
-
-            return advertismentProviders;
+            return session.createQuery(adsProviderQuery).getResultList();
         }
     }
 
@@ -45,7 +43,7 @@ public class AdsProviderRepositoryImpl implements AdsProviderRepository {
     ////////// POLIGON ////////////////
     private Logger logger = LoggerFactory.getLogger(getClass());
 
-    @PostConstruct // wumysza uruchomienie tej metory po stworzeniu repozytorium
+    //@PostConstruct // wumysza uruchomienie tej metory po stworzeniu repozytorium
     public void poligon(){
         logger.info("utworzylismy ads provider repository!");
 
@@ -58,7 +56,8 @@ public class AdsProviderRepositoryImpl implements AdsProviderRepository {
 
     }
 
-    public void printCompaniesCreatedAfterYear (int year){
+    @SuppressWarnings("unchecked")
+    private void printCompaniesCreatedAfterYear (int year){
 
         /**
          *  SQL:
@@ -96,7 +95,8 @@ public class AdsProviderRepositoryImpl implements AdsProviderRepository {
         }
     }
 
-    public void printCompaniesWithDoubleLetter(char letter){
+    @SuppressWarnings("unchecked")
+    private void printCompaniesWithDoubleLetter(char letter){
 
         /**
          * SQL:
@@ -135,14 +135,19 @@ public class AdsProviderRepositoryImpl implements AdsProviderRepository {
 
     }
 
-    public void printCompaniesCreatedAfterYearOrWithLetter(int year, char letter){
+    @SuppressWarnings("unchecked")
+    private void printCompaniesCreatedAfterYearOrWithLetter(int year, char letter){
 
         String pattern = "%" + letter + "%";
         //1
         try(Session session = sessionFactory.openSession()){
             Criteria criteria = session.createCriteria(AdvertismentProvider.class);
-            List<AdvertismentProvider> result = criteria.add(Restrictions.or(Restrictions.gt("yearCreated", year),
-                    Restrictions.like("companyName", pattern))).list();
+            List<AdvertismentProvider> result = criteria.add(
+                    Restrictions.or(
+                            Restrictions.gt("yearCreated", year),
+                            Restrictions.like("companyName", pattern)
+                    )
+            ).list();
             logger.info("Stare API:  " + result);
         }
 
@@ -151,8 +156,12 @@ public class AdsProviderRepositoryImpl implements AdsProviderRepository {
             CriteriaBuilder builder = session.getCriteriaBuilder();
             CriteriaQuery<AdvertismentProvider> query = builder.createQuery(AdvertismentProvider.class);
             Root<AdvertismentProvider> from = query.from(AdvertismentProvider.class);
-            query.where(builder.or(builder.like(from.get("companyName"), pattern),
-                    builder.gt(from.get("yearCreated"),year)));
+            query.where(
+                    builder.or(
+                            builder.like(from.get("companyName"), pattern),
+                            builder.gt(from.get("yearCreated"),year)
+                    )
+            );
 
             List<AdvertismentProvider> result = session.createQuery(query).getResultList();
             logger.info("Nowe API:  " + result);
@@ -162,7 +171,9 @@ public class AdsProviderRepositoryImpl implements AdsProviderRepository {
         try(Session session = sessionFactory.openSession()){
             Query query = session.createQuery("from AdvertismentProvider where companyName like :pattern or " +
                     "                   yearCreated > :year");
-            query.setParameter("pattern", pattern).setParameter("year", year); // podajemy parametry uzywane w criteriaQuery
+
+            query.setParameter("pattern", pattern)
+                    .setParameter("year", year); // podajemy parametry uzywane w criteriaQuery
 
             List<AdvertismentProvider> result = query.getResultList();
             logger.info("HQL:  " + result);
